@@ -6,8 +6,10 @@ pub struct PulseInfo {
 
 pub const PULSE_HIGH :u8 = 1;
 pub const PULSE_LOW: u8 = 0;
-pub const TOTAL_PRESSES_TIME: u128 = 2000;
-pub const TOTAL_PRESS: u128 = 10;
+pub const TOTAL_PRESSES_TIME: u128 = 0;
+pub const TOTAL_PRESS: u128 = 0;
+const DEFAULT_WPM: u128 = 60;
+const ONE_MINUTE: u128 = 60;
 
 static MORSE_MAP: [(&str, &str); 37] = [
     (".-", "A"), ("-...", "B"), ("-.-.", "C"), ("-..", "D"), (".", "E"),
@@ -20,7 +22,8 @@ static MORSE_MAP: [(&str, &str); 37] = [
     ("---..", "8"), ("----.", "9"), ("-----", "0"), (" ", " "),
 ];
 
-fn parse_to_text(morse_code: &Vec<String>) {
+fn parse_to_text(morse_code: &Vec<String>)
+{
     let mut morse_parsed = String::new();
 
     for morse_letter in morse_code {
@@ -39,14 +42,14 @@ fn parse_to_text(morse_code: &Vec<String>) {
     tracing::info!("{}",morse_parsed.trim().to_string());
 }
 
-pub fn analize_secuence(pulse_info: &[PulseInfo], total_presses: u128, total_press_time: u128) {
-
-    println!("TOTAL PRESSES {} TOTAL PRESS TIME {}", total_presses, total_press_time);
-    let wpm = (total_presses * 60) / (total_press_time / 50);
-    let dot = (60 * 1000) / (50 * wpm);
-    let dash = dot * 3; // Dash is 3 units of dot
-    let word = dot * 7; // Word is 7 units of do
-    let threshold = dot;
+pub fn analize_secuence(pulse_info: &[PulseInfo], total_presses: u128, total_press_time: u128)
+{
+    let time:f32 = total_press_time as f32 / 1000.0 * 50.0;
+    let wpm: u128 = (total_presses * ONE_MINUTE) / time as u128;
+    let dot:u128 = (ONE_MINUTE * 1000) / (DEFAULT_WPM * wpm);
+    let dash: u128 = dot * 3; // Dash is 3 units of dot
+    let word:u128 = dot * 7; // Word is 7 units of do
+    let threshold = dot / 2;
 
     let mut letter :String = String::new();
     let mut array_strings: Vec<String> = Vec::new();
@@ -62,7 +65,7 @@ pub fn analize_secuence(pulse_info: &[PulseInfo], total_presses: u128, total_pre
         } else if pulse.status == PULSE_LOW {
             if pulse.millis <= dash {
                 continue;
-            } else if pulse.millis > dash && pulse.millis < word {
+            } else if pulse.millis > dash - threshold && pulse.millis < word {
                 array_strings.push(letter.clone());
                 letter.clear();
             } else if pulse.millis >= word {
