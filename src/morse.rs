@@ -50,7 +50,7 @@ pub fn analize_secuence(pulse_info: &[PulseInfo], total_presses: u128, total_pre
     let dash: u128 = dot * 3; // Dash is 3 units of dot
     let word:u128 = dot * 7; // Word is 7 units of do
     let threshold = dot / 2;
-
+    let threshold_dash = dash / 2;
     let mut letter :String = String::new();
     let mut array_strings: Vec<String> = Vec::new();
 
@@ -63,9 +63,9 @@ pub fn analize_secuence(pulse_info: &[PulseInfo], total_presses: u128, total_pre
                 letter.push('-');
             }
         } else if pulse.status == PULSE_LOW {
-            if pulse.millis <= dash {
+            if pulse.millis < dash - threshold_dash {
                 continue;
-            } else if pulse.millis > dash - threshold && pulse.millis < word {
+            } else if pulse.millis >= dash - threshold_dash && pulse.millis <= word {
                 array_strings.push(letter.clone());
                 letter.clear();
             } else if pulse.millis >= word {
