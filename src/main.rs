@@ -55,25 +55,19 @@ fn configure_pins(led: Pin, button: Pin, buzzer: Pin) {
     led.set_direction(Direction::Out).unwrap();
     button.set_direction(Direction::In).unwrap();
     buzzer.set_direction(Direction::Out).unwrap();
-
-    /* Configure Interruption */
-    //button.set_edge(Edge::BothEdges).unwrap();
 }
 
-/*
-fn buzzer_sound(buzzer: Pin, delay_secs: u64) {
-    match buzzer.set_value(1) {
-        Ok(_) => tracing::debug!("Zumbador activado"),
-        Err(e) => tracing::error!("Error al activar el zumbador: {}", e),
-    }
-    thread::sleep(Duration::from_millis(delay_secs));
-
-    match buzzer.set_value(0) {
-        Ok(_) => tracing::debug!("Zumbador desactivado"),
-        Err(e) => tracing::error!("Error al desactivar el zumbador: {}", e),
-    }
+fn play_sound(buzzer: Pin) {
+    thread::spawn(move || {
+        let _ = buzzer.set_value(1);
+    });
 }
-*/
+
+fn stop_sound(buzzer: Pin) {
+    thread::spawn(move || {
+        let _ = buzzer.set_value(0);
+    });
+}
 
 #[tokio::main(flavor = "current_thread")]
 #[tracing::instrument]
@@ -100,6 +94,7 @@ async fn main() -> anyhow::Result<()> {
         if button.get_value()? == LED_ON {
             if time_button_pressed.is_none() {
                 time_button_pressed = Some(Instant::now());
+                play_sound(buzzer.clone());
             }
 
             if let Some(released) = time_button_released {
@@ -117,6 +112,7 @@ async fn main() -> anyhow::Result<()> {
         } else {
             if time_button_released.is_none() {
                 time_button_released = Some(Instant::now());
+                stop_sound(buzzer.clone());
             }
             if let Some(pressed) = time_button_pressed {
                 let elapsed_time = Instant::now().duration_since(pressed);
@@ -126,6 +122,7 @@ async fn main() -> anyhow::Result<()> {
                         status: morse::PULSE_HIGH,
                         millis: time_ms,
                     });
+                    
 
                 total_press_time += time_ms; // Actualizar el tiempo total de pulsación acumulado
                 total_presses += 1; // Incrementar el número total de pulsaciones
