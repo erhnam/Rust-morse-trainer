@@ -47,29 +47,51 @@ fn gpio_get_pin(pin_num: u64) -> u64 {
 
 fn configure_pins(led: Pin, button: Pin, buzzer: Pin) {
     /* Exported pins */
-    led.export().unwrap();
-    button.export().unwrap();
-    buzzer.export().unwrap();
+    if led.export().is_err() {
+        tracing::error!("Can't export led");
+    }
+
+    if button.export().is_err() {
+        tracing::error!("Can't export button");
+    }
+
+    if buzzer.export().is_err() {
+        tracing::error!("Can't export buzzer");
+    }
 
     /* Configure Pin directions */
-    led.set_direction(Direction::Out).unwrap();
-    button.set_direction(Direction::In).unwrap();
-    buzzer.set_direction(Direction::Out).unwrap();
+    if led.set_direction(Direction::Out).is_err(){
+        tracing::error!("Can't set direction of led");
+    }
+
+    if button.set_direction(Direction::In).is_err() {
+        tracing::error!("Can't set direction of button");
+    }
+
+    if buzzer.set_direction(Direction::Out).is_err() {
+        tracing::error!("Can't set direction of buzzer");
+    }
 }
 
 fn play_sound(buzzer: Pin) {
-    let _ = buzzer.set_value(1);
+    if buzzer.set_value(1).is_err() {
+        tracing::error!("Can't set 1 to buzzer");
+    }
 }
 
 fn stop_sound(buzzer: Pin) {
-    let _ = buzzer.set_value(0);
+    if buzzer.set_value(0).is_err() {
+        tracing::error!("Can't set 1 to buzzer");
+    }
 }
 
 #[tokio::main(flavor = "current_thread")]
 #[tracing::instrument]
 async fn main() -> anyhow::Result<()> {
     let subscriber = tracing_subscriber::FmtSubscriber::new();
-    tracing::subscriber::set_global_default(subscriber).unwrap();
+    if tracing::subscriber::set_global_default(subscriber).is_err() {
+        tracing::error!("Can't set global tracing::subscriber default");
+    }
 
     tracing::info!("Morse Code");
 
@@ -118,7 +140,6 @@ async fn main() -> anyhow::Result<()> {
                         status: morse::PULSE_HIGH,
                         millis: time_ms,
                     });
-                    
 
                 total_press_time += time_ms; // Actualizar el tiempo total de pulsación acumulado
                 total_presses += 1; // Incrementar el número total de pulsaciones
