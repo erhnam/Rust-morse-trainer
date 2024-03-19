@@ -94,7 +94,7 @@ async fn main() -> anyhow::Result<()> {
         if button.get_value()? == LED_ON {
             if time_button_pressed.is_none() {
                 time_button_pressed = Some(Instant::now());
-                play_sound(buzzer.clone());
+                play_sound(buzzer);
             }
 
             if let Some(released) = time_button_released {
@@ -112,7 +112,7 @@ async fn main() -> anyhow::Result<()> {
         } else {
             if time_button_released.is_none() {
                 time_button_released = Some(Instant::now());
-                stop_sound(buzzer.clone());
+                stop_sound(buzzer);
             }
             if let Some(pressed) = time_button_pressed {
                 let elapsed_time = Instant::now().duration_since(pressed);
