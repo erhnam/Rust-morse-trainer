@@ -58,15 +58,11 @@ fn configure_pins(led: Pin, button: Pin, buzzer: Pin) {
 }
 
 fn play_sound(buzzer: Pin) {
-    thread::spawn(move || {
-        let _ = buzzer.set_value(1);
-    });
+    let _ = buzzer.set_value(1);
 }
 
 fn stop_sound(buzzer: Pin) {
-    thread::spawn(move || {
-        let _ = buzzer.set_value(0);
-    });
+    let _ = buzzer.set_value(0);
 }
 
 #[tokio::main(flavor = "current_thread")]
