@@ -7,8 +7,9 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.79"
-clippy = "0.0.302"
 sysfs_gpio = "0.6.1"
 tokio = { version = "1.36.0", features = ["rt", "macros"] }
 tracing = { version = "0.1.40", features = ["async-await"] }
 tracing-subscriber = "0.3.18"
+wiringx = "0.1.3"
+wiringx-sys = "0.1.2"
