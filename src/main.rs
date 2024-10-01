@@ -38,45 +38,34 @@ const PIN_BUTTON: i32 = 22;
 const PIN_BUZZER: i32 = 15;
 
 /*
-WiringX map, the pin it is the position array.
-static int map[] = {
-	/*	XGPIOA[28]	XGPIOA[29]	PWR_GPIO[26]	PWR_GPIO[25]	*/
-		28,		29,		122,		121,
-
-	/*	PWR_GPIO[19]	PWR_GPIO[20]	PWR_GPIO[23]	PWR_GPIO[22]	*/
-		115,		116,		119,		118,
-
-	/*	PWR_GPIO[21]	PWR_GPIO[18]	XGPIOC[9]	XGPIOC[10]	*/
-		117,		114,		73,		74,
-
-	/*	XGPIOA[16]	XGPIOA[17]	XGPIOA[14]	XGPIOA[15]	*/
-		16,		17,		14,		15,
-
-	/*	XGPIOA[23]	XGPIOA[24]	XGPIOA[22]	XGPIOA[25]	*/
-		23,		24,		22,		25,
-
-	/*	XGPIOA[27]	XGPIOA[26]	PWR_GPIO[4]	N/A		*/
-		27,		26,		100,		-1,
-
-	/*	N/A		XGPIOC[24]	XGPIOB[3]	XGPIOB[6]	*/
-		-1,		88,		35,		38
-};
-*/
-/*
-fn gpio_get_pin(pin_num: u64) -> u64 {
-    let pinnum = [
-        1, 2, 4, 5, 6, 7, 9, 10, 11, 12, 14, 15, 16, 17, 19, 20, 21, 22, 24, 25, 26, 27, 29, 41,
-    ];
-    let pinmap = [
-        508, 509, 378, 377, 371, 372, 375, 374, 373, 370, 425, 426, 496, 497, 494, 495, 503, 504,
-        502, 505, 507, 506, 356, 440,
-    ];
-
-    match pinnum.iter().position(|&x| x == pin_num) {
-        Some(index) => pinmap[index],
-        None => 0, // Valor predeterminado si el pin no se encuentra en la lista
-    }
-}
+BCM  -  Wiring X
+ 1   -     0
+ 2   -     1
+ 4   -     2
+ 5   -     3
+ 6   -     4
+ 7   -     5
+ 9   -     6
+10   -     7
+11   -     8
+12   -     9
+14   -     10
+15   -     11
+16   -     12
+17   -     13
+19   -     14
+20   -     15
+21   -     16
+22   -     17
+24   -     18
+25   -     19
+26   -     20
+27   -     21
+29   -     22
+30   -     23 RUN
+LED   -    25
+31   -     26
+32   -     27
 */
 
 #[tracing::instrument]
