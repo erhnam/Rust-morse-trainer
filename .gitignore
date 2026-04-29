@@ -1,0 +1,14 @@
+# Binarios de compilación
+/target/
+
+# Archivos temporales de editores
+**/*.rs.bk
+.vscode/
+.idea/
+
+# Si generas archivos de volcado de memoria o logs locales
+*.log
+*.dump
+
+# Archivos de configuración local (si usas variables de entorno)
+.env
