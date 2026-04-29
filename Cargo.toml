@@ -3,12 +3,24 @@ name = "morse"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+# ─── Features ────────────────────────────────────────────────────────────────
+# Build only what you need:
+#
+#   Board (GPIO):   cargo build --features gpio
+#   Linux PC:       cargo build --features keyboard
+#   Both:           cargo build --features gpio,keyboard
+#
+[features]
+default = []
+gpio     = ["dep:linux-embedded-hal"]
+keyboard = ["dep:evdev"]
 
+# ─── Dependencies ────────────────────────────────────────────────────────────
 [dependencies]
-anyhow = "1.0.79"
-linux-embedded-hal = "0.4.0"
-sysfs_gpio = "0.6.1"
-tokio = { version = "1.36.0", features = ["rt", "macros"] }
-tracing = { version = "0.1.40", features = ["async-await"] }
-tracing-subscriber = "0.3.18"
+anyhow = "1.0.102"
+linux-embedded-hal = { version = "0.4.1", optional = true }
+sysfs_gpio = { version = "0.6.2", optional = true }
+tokio = { version = "1.52.0", features = ["rt", "macros"] }
+tracing = { version = "0.1.44", features = ["async-await"] }
+tracing-subscriber = "0.3.23"
+evdev = { version = "0.13.2", optional = true }

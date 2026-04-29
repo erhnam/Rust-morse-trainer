@@ -1,0 +1,1 @@
+/home/farcos/Cositas/rust/Rust-morse-trainer/target/release/morse: /home/farcos/Cositas/rust/Rust-morse-trainer/src/input.rs /home/farcos/Cositas/rust/Rust-morse-trainer/src/main.rs /home/farcos/Cositas/rust/Rust-morse-trainer/src/morse.rs
